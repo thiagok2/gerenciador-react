@@ -13,6 +13,7 @@ import LancamentoService from '../../app/service/lancamentoService'
 
 import LocalStorageService from '../../app/service/localStorageService'
 
+import * as messages from '../../components/toastr'
 class ConsultaLancamentos extends React.Component{
 
     state = {
@@ -30,6 +31,11 @@ class ConsultaLancamentos extends React.Component{
     }
 
     buscar = () =>{
+
+        if(!this.state.ano){
+            messages.mensagemErro('Preencher ano é obrigatório');
+            return false;
+        }
         console.log(this.state);
 
         const usuarioLogado = LocalStorageService.obterItem('_usuario_logado')
