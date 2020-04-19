@@ -15,6 +15,12 @@ import '../custom.css'
 import 'toastr/build/toastr.css'
 import 'toastr/build/toastr.min.js'
 
+import {Button} from 'primereact/button';
+
+import 'primereact/resources/themes/nova-light/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
+
 class App extends React.Component {
   
 
@@ -22,6 +28,7 @@ class App extends React.Component {
     return (
       <div>
         <NavBar />
+        <Button label="Click" icon="pi pi-check" iconPos="right" />
         <div className="container">
           <Rotas  />
         </div>
