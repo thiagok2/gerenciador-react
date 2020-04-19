@@ -12,6 +12,9 @@ import CadastroUsuario from '../views/cadastroUsuario'
 
 import '../custom.css'
 
+import 'toastr/build/toastr.css'
+import 'toastr/build/toastr.min.js'
+
 class App extends React.Component {
   
 

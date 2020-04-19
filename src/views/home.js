@@ -1,5 +1,11 @@
 import React from 'react'
 
+import axios from 'axios'
+
+import UsuarioService from '../app/service/usuarioService'
+
+import LocalStorageService from '../app/service/localStorageService'
+
 
 class Home extends React.Component{
 
@@ -7,8 +13,26 @@ class Home extends React.Component{
         saldo: 0
     }
 
+    constructor(){
+        super();
+        this.service = new UsuarioService();
+    }
 
-    
+    componentDidMount(){
+
+        const usuarioLogado = LocalStorageService.obterItem('_usuario_logado');
+
+        this.service.obterSaldoPorUsuario(usuarioLogado.id).then((response) => {
+            console.log(response);
+            //this.setState({saldo: response.data});
+        }).catch(( erro => {
+            console.log(erro.response);
+        }));
+    }
+
+    com
+
+
     render(){
         return (
             <div className="jumbotron">

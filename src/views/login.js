@@ -7,6 +7,12 @@ import { withRouter } from 'react-router-dom'
 
 import axios from 'axios'
 
+import UsuarioService from '../app/service/usuarioService'
+
+import LocalStorageService from '../app/service/localStorageService'
+
+import { mensagemErro } from '../components/toastr'
+
 class Login extends React.Component{
 
     state = {
@@ -15,19 +21,26 @@ class Login extends React.Component{
         mensagemErro: null
     }
 
+    constructor(){
+        super();
+        this.service = new UsuarioService();
+    }
+
     entrar = () =>{
         
-        axios.post('http://localhost:8080/api/usuarios/autenticar',
-            {
+        this.service.autenticar({
                 email: this.state.email,
                 senha: this.state.senha
-            }
-        ).then( response => {
+        }).then( response => {
+            LocalStorageService.adicionarItem('_usuario_logado', response.data);
+
+            //localStorage.setItem('_usuario_logado', JSON.stringify(response.data));
             this.props.history.push('/home')
             //console.log(response);
         }).catch( erro => {
-            this.setState({mensagemErro : erro.response.data});
-            //console.log(erro.response)
+            //this.setState({mensagemErro : erro.response.data});
+            //console.log(erro.response);
+            mensagemErro(erro.response.data);
         });
 
     }
@@ -42,9 +55,7 @@ class Login extends React.Component{
                 <div className="col-md-6" style={ {position: 'relative', left: '300px'} }>
                     <div className="bs-docs-section">
                         <Card title='Login'>
-                            <div className="row">
-                                <span>{this.state.mensagemErro}</span>
-                            </div>
+                            
                             <div className="row">
                                 <div className="col-lg-12">
                                     <div className="bs-component">
