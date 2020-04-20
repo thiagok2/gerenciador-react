@@ -25,45 +25,20 @@ class CadastroUsuario extends React.Component{
         this.service = new UsuarioService();
     }
 
-    validar(){
-        const msgs = [];
-
-        if(!this.state.nome){
-            msgs.push('O campo nome é obrigatório');
-        }
-
-        if(!this.state.email){
-            msgs.push('O campo email é obrigatório');
-        }else if( !this.state.email.match(/^[a-z0-9.]+@[a-z0-9]+\.[a-z]/) ){
-            msgs.push('O campo email é inválido');
-        }
-
-
-        if(!this.state.senha || !this.state.repitaSenha){
-            msgs.push('Preencha os campos de senha');
-        }else if( this.state.senha !== this.state.repitaSenha ){
-            msgs.push('A senha não bate.');
-        }
-
-        return msgs;
-    }
-
+   
     cadastrar = () => {
-        const msgs = this.validar();
+        
+        const {nome, email, senha, repitaSenha } = this.state        
+        const usuario = {nome,  email, senha, repitaSenha }
 
-        if(msgs && msgs.length > 0 ){
-            msgs.forEach( (msg, index) => {
-                mensagemErro(index+1 + ' - ' + msg);
-            })
-            
-            return;
+        try{
+            this.service.validar(usuario);
+        }catch(erro){
+            const msgs = erro.mensagens;
+            msgs.forEach(msg => mensagemErro(msg));
+            return false;
         }
 
-        const usuario = {
-            nome: this.state.nome,
-            email: this.state.email,
-            senha: this.state.senha
-        };
         this.service.salvar( usuario ).then((response) => {
             mensagemSucesso('Usuário cadastrado com sucesso. Faça o login');
             this.props.history.push('/login');
