@@ -24,7 +24,7 @@ class Home extends React.Component{
 
         this.service.obterSaldoPorUsuario(usuarioLogado.id).then((response) => {
             console.log(response);
-            //this.setState({saldo: response.data});
+            this.setState({saldo: response.data});
         }).catch(( erro => {
             console.log(erro.response);
         }));
@@ -43,12 +43,12 @@ class Home extends React.Component{
                 <p>E essa é sua área administrativa, utilize um dos menus ou botões abaixo para navegar pelo sistema.</p>
                 <p className="lead">
                     <a className="btn btn-primary btn-lg" 
-                        href="https://bootswatch.com/flatly/#" role="button">
+                        href="#/consulta-lancamentos" role="button">
                             <i className="fa fa-users"></i>  
                             Cadastrar Usuário
                     </a>
                     <a className="btn btn-danger btn-lg" 
-                        href="https://bootswatch.com/flatly/#" role="button">
+                        href="#/cadastro-lancamentos" role="button">
                             <i className="fa fa-users"></i>  
                             Cadastrar Lançamento
                     </a>

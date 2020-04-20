@@ -14,6 +14,10 @@ import LancamentoService from '../../app/service/lancamentoService'
 import LocalStorageService from '../../app/service/localStorageService'
 
 import * as messages from '../../components/toastr'
+
+import {Dialog} from 'primereact/dialog';
+import {Button} from 'primereact/button';
+
 class ConsultaLancamentos extends React.Component{
 
     state = {
@@ -22,7 +26,9 @@ class ConsultaLancamentos extends React.Component{
         tipo: '',
         descricao: '',
         lancamentos: [],
-        usuario: ''
+        usuario: '',
+        showConfirmDialog: false,
+        lancamentoDeletar: null
     }
 
     constructor(){
@@ -62,25 +68,40 @@ class ConsultaLancamentos extends React.Component{
 
     editar = (id) => {
         console.log('editando lancamento', id);
+        this.props.history.push(`/cadastro-lancamentos/${id}`);
 
     }
 
-    deletar = (lancamento) => {
-        console.log('deletando lancamento', lancamento.id);
-        this.service.deletar(lancamento.id).then( response =>{
+    abrirConfirmacao = (lancamento) =>{
+        this.setState({showConfirmDialog: true, lancamentoDeletar: lancamento});
+    }
 
-            const lancamentos = this.state.lancamentos;
-            const index = lancamentos.indexOf(lancamentos);
-            lancamentos.splice(index, 1);
+    cancelarDelecao = () => {
+        this.setState({showConfirmDialog: false, lancamentoDeletar: null});
+    }
 
-            this.setState({
-                lancamentos: lancamentos
-            });
+    deletar = () => {
+        console.log('deletando lancamento', this.state.lancamentoDeletar.id);
+        this.service.deletar(this.state.lancamentoDeletar.id).
+            then( response =>{
+
+                const lancamentos = this.state.lancamentos;
+                const index = lancamentos.indexOf(lancamentos);
+                lancamentos.splice(index, 1);
+
+                this.setState({
+                    lancamentos: lancamentos,
+                    showConfirmDialog: false
+                });
 
             messages.mensagemSucesso('Lancamento ex');
         }).catch(error => {
             messages.mensagemErro(error);
         })
+    }
+
+    prepararFormularioLancamento = () =>{
+        this.props.history.push('/cadastro-lancamentos');
     }
     
     render(){
@@ -88,6 +109,19 @@ class ConsultaLancamentos extends React.Component{
         const lista = this.service.obterListaMeses();
 
         const tipos = this.service.obterListaTipos();
+
+        const confirmDialogFooter = (
+            <div>
+                <Button label="Yes" icon="pi pi-check" onClick={this.deletar} />
+                <Button label="No" icon="pi pi-times" onClick={this.cancelarDelecao} />
+            </div>
+        );
+        
+        const myIcon = (
+            <button className="p-dialog-titlebar-icon p-link">
+                <span className="pi pi-search"></span>
+            </button>
+        )
 
         return (
             <Card title="Consulta Lançamentos">
@@ -125,20 +159,31 @@ class ConsultaLancamentos extends React.Component{
                         </FormGroup>
 
                         <button type="button" onClick={this.buscar} className="btn btn-success">Buscar</button>
-                        <button type="button" className="btn btn-danger">Cadastrar</button>
+                        <button type="button" onClick={this.prepararFormularioLancamento} className="btn btn-danger">Cadastrar</button>
                     </div>
                 </div>
 
                 <div className="row">
                     <div className="col-md-12">
-                        <div class="bs-component">
+                        <div className="bs-component">
                             <LancamentoTable lancamentos={this.state.lancamentos}
-                                deleteAction={this.deletar}
+                                deleteAction={this.abrirConfirmacao}
                                 editAction={this.editar}
 
                             ></LancamentoTable>
+                            
                         </div>
                     </div>
+                </div>
+                <div>
+                    <Dialog header="Confirma?" 
+                        visible={this.state.showConfirmDialog} 
+                        style={{width: '50vw'}} 
+                        modal={true}
+                        footer={confirmDialogFooter} 
+                        onHide={() => this.setState({showConfirmDialog: false})}>
+                        Confirma a exclusão desse lançamento?
+                    </Dialog>
                 </div>
             </Card>
         )

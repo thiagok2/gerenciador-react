@@ -28,7 +28,7 @@ class App extends React.Component {
     return (
       <div>
         <NavBar />
-        <Button label="Click" icon="pi pi-check" iconPos="right" />
+        
         <div className="container">
           <Rotas  />
         </div>
