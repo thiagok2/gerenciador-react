@@ -108,4 +108,9 @@ export default class LancamentoService extends ApiService{
             throw new ErroValidacao(erros);
         }
     }
+
+    alterarStatus(id, status){
+        const statusDTO = {status}
+        return this.put(`/${id}/atualizar-status`, statusDTO);
+    }
 }

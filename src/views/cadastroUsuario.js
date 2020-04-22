@@ -28,8 +28,8 @@ class CadastroUsuario extends React.Component{
    
     cadastrar = () => {
         
-        const {nome, email, senha, repitaSenha } = this.state        
-        const usuario = {nome,  email, senha, repitaSenha }
+        const { nome, email, senha, repitaSenha } = this.state        
+        const usuario = { nome,  email, senha, repitaSenha }
 
         try{
             this.service.validar(usuario);
@@ -84,8 +84,12 @@ class CadastroUsuario extends React.Component{
                                     id="inputSenha" name="repitaSenha" onChange={(e) => this.setState({repitaSenha: e.target.value})}/>
                             </FormGroup>
 
-                            <button onClick={this.cadastrar} type="button" className="btn btn-success">Salvar</button>
-                            <button onClick={this.cancelar} type="button" className="btn btn-danger">Voltar</button>
+                            <button onClick={this.cadastrar} type="button" className="btn btn-success">
+                                <i class="pi pi-save"></i> Salvar
+                            </button>
+                            <button onClick={this.cancelar} type="button" className="btn btn-danger">
+                            <i class="pi pi-times"></i> Voltar
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -31,5 +31,5 @@ export function mensagemSucesso(mensagem){
 }
 
 export function mensagemAviso(mensagem){
-    mostrarMensagem('Aviso', mensagem, 'waning')
+    mostrarMensagem('Aviso', mensagem, 'warning')
 }

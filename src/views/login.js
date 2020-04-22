@@ -12,13 +12,13 @@ import UsuarioService from '../app/service/usuarioService'
 import LocalStorageService from '../app/service/localStorageService'
 
 import { mensagemErro } from '../components/toastr'
+import { AuthContext } from '../main/provedorAutenticacao'
 
 class Login extends React.Component{
 
     state = {
         email: '',
-        senha: '',
-        mensagemErro: null
+        senha: ''
     }
 
     constructor(){
@@ -32,15 +32,14 @@ class Login extends React.Component{
                 email: this.state.email,
                 senha: this.state.senha
         }).then( response => {
-            LocalStorageService.adicionarItem('_usuario_logado', response.data);
-
-            //localStorage.setItem('_usuario_logado', JSON.stringify(response.data));
+            console.log(response.data);
+            this.context.iniciarSessao(response.data);
             this.props.history.push('/home')
-            //console.log(response);
+        
         }).catch( erro => {
             //this.setState({mensagemErro : erro.response.data});
             //console.log(erro.response);
-            mensagemErro(erro.response.data);
+            mensagemErro(erro);
         });
 
     }
@@ -76,8 +75,12 @@ class Login extends React.Component{
                                                     aria-describedby="senhaHelp" placeholder="Digite a senha"/>
                                             </FormGroup>
 
-                                            <button onClick={this.entrar} type="button" className="btn btn-success">Entrar</button>
-                                            <button onClick={this.prepareCadastrar} type="button" className="btn btn-danger">Cadastrar</button>
+                                            <button onClick={this.entrar} type="button" className="btn btn-success">
+                                                <i className="pi pi-sign-in"></i>Entrar
+                                            </button>
+                                            <button onClick={this.prepareCadastrar} type="button" className="btn btn-danger">
+                                            <i className="pi pi-plus"></i>Cadastrar
+                                            </button>
 
                                         </fieldset>
                                     </div>
@@ -92,5 +95,6 @@ class Login extends React.Component{
     }
 }
 
+Login.contextType = AuthContext;
 
 export default withRouter( Login );

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import ProvedorAutenticacao from './provedorAutenticacao'
+
 import 'bootswatch/dist/flatly/bootstrap.css'
 
 import Login from '../views/login'
@@ -26,13 +28,13 @@ class App extends React.Component {
 
   render(){
     return (
-      <div>
+      <ProvedorAutenticacao>
         <NavBar />
         
         <div className="container">
           <Rotas  />
         </div>
-      </div>
+      </ProvedorAutenticacao>
     );
   }
   
